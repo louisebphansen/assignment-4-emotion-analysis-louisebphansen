@@ -99,16 +99,31 @@ def plot_grid(n_rows, n_cols, frequencies_list, emotion_labels):
     plt.savefig('out/frequency_per_season.png')
 
 def plot_seasons_freq(labelled_df):
+    '''
+    This function counts the relative frequencies of each emotion label for each season and plots them in a grid.
+    
+    Arguments:
+        - labelled_df: Pandas DataFrame with emotion-labelled data
+    
+    Returns:
+        None
 
+    '''
+
+    # save dataframe with count for each label for each season
     count_df = labelled_df.groupby(['Season', 'label']).size().unstack().reset_index()
 
+    # save list of total number of sentences for each season
     n_sentences = list(labelled_df.groupby('Season').size())
 
+    # convert raw counts to relative frequencies
     frequencies_list = relative_frequencies(count_df, n_sentences)
 
-    names = list(count_df.columns[1:])
+    # save list of emotion labels
+    emotion_labels = list(count_df.columns[1:])
 
-    plot_grid(4, 2, frequencies_list, names)
+    # plot barplot of frequencies for labels for each season
+    plot_grid(4, 2, frequencies_list, emotion_labels)
 
 def plot_freq_all(labelled_df):
 
