@@ -113,7 +113,8 @@ python3 src/plotting.py --in_csv <in_csv>
 - **in_csv:** Name of emotion-labelled csv file in ```in``` folder. Default: 'GoT_labelled.csv'.
 
 ### Results
+![image](https://github.com/louisebphansen/assignment-4-emotion-analysis-louisebphansen/assets/75262659/e0c5d6ed-ab05-466c-8e0a-153091cfc257)
 
-##### Relative frequency of emotion labels per season
+![image](https://github.com/louisebphansen/assignment-4-emotion-analysis-louisebphansen/assets/75262659/b089508b-f1c6-48ab-b7d4-6a45ccaa964f)
 
 It is clearly evident that the most common emotion throughout the entire series is 'neutral'. This makes sense as there are generally in tv-shows probably a lot of sentences which doesn't have any emotional valence, but rather just someone saying *hello* or asking someone to bring out the horses. Interestingly, the most common emotions after 'neutral' are 'anger', 'disgust' and 'surprise'. 'anger' being the second-most frequent emotion is probably because Game of Thrones is a series containing a lot of hostility, violence and war-scenes. The frequency of the 'disgust' emotion probably also reflects this hostility as well as the disputes between the different houses which is one of the core themes throughout the series. Looking at the distribution of frequencies for each season, there seems to be approximately the same pattern for all seasons. Interestingly, the relative frequency for 'anger' is highest in the final season (season 8), which could be because this is where some of the series' final battles are fought. Lastly, one cn, from the plots, deduce that Game of Thrones is not a very joyful series; the plot of relative frequencies across all seasons show that this is the least used emotion.  
