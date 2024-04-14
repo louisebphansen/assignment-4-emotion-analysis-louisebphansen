@@ -109,7 +109,6 @@ def plot_seasons_freq(labelled_df):
         None
 
     '''
-
     # save dataframe with count for each label for each season
     count_df = labelled_df.groupby(['Season', 'label']).size().unstack().reset_index()
 
@@ -126,32 +125,51 @@ def plot_seasons_freq(labelled_df):
     plot_grid(4, 2, frequencies_list, emotion_labels)
 
 def plot_freq_all(labelled_df):
+    '''
+    Counts and plots the relative frequency of emotion labels across all seasons.
+    Plot is saved in the /out folder
 
-    total_counts = list(labelled_df.groupby('label').size())
+    Arguments:
+        - labelled_df: Pandas DataFrame with emotion-labelled data
+    
+    Returns:
+        - None
+    '''
 
-    rel_freqs = [n / len(labelled_df) for n in total_counts]
+    # get count of each emotion label across all seasons
+    all_counts = list(labelled_df.groupby('label').size())
 
+    # calculate relative frequencies by dividing by total amount of sentences
+    rel_freqs = [n / len(labelled_df) for n in all_counts]
+
+    # get list of labels (sorting them alphabetically)
     labels = list(np.sort(labelled_df['label'].unique()))
 
+    # create plot
     fig, ax = plt.subplots()
     colors = ['red', 'olive', 'purple', 'green', 'orange', 'blue', 'pink']
 
+    # create barplot with labels and relative frequencies
     ax.bar(labels, rel_freqs, color=colors)
-
     ax.set_ylabel('Relative frequency')
     ax.set_title('Relative frequency across all seasons')
 
+    # save in out folder
     plt.savefig('out/frequency_across_seasons.png')
 
 def main():
 
+    # load args
     args = argument_parser()
 
+    # define in-path and load labelled df
     in_path = os.path.join('in', args['in_csv'])
     labelled_df = pd.read_csv(in_path)
 
+    # create plot of frequencies of labels for each season and save in /out
     plot_seasons_freq(labelled_df)
 
+    # create plot of frequencies of labels across all seasons
     plot_freq_all(labelled_df)
 
     print('Code finished: see plots in /out folder')
