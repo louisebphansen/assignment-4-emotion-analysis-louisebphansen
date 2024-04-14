@@ -50,7 +50,7 @@ def classify_emotions(df):
     labels = []
     score = []
 
-    # 
+    # classify each sentence in dataset and save labels and scores to list (again, using the recommended method from HuggingFace pipeline documentation for optimal use)
     for out in tqdm(classifier(KeyDataset(dataset, "Sentence"))):
         
         labels.append(out['label'])

@@ -87,15 +87,17 @@ def plot_grid(n_rows, n_cols, frequencies_list, emotion_labels):
     for row in range(n_rows):
         for col in range(n_cols):
                 # plot barplot using relative frequencies
-                axes[i][j].bar(emotion_labels, frequencies_list[n], color=colors)
-                axes[i][j].set_title(f'Frequency of emotion labels for Season {n + 1}')
-                axes[i][j].set_ylabel('Relative frequency')
+                axes[row][col].bar(emotion_labels, frequencies_list[n], color=colors)
+                axes[row][col].set_title(f'Season {n + 1}')
+                axes[row][col].set_ylabel('Relative frequency')
 
                 # add 1 to the 'season' variable to plot the next season in the next grid-space
                 n += 1 
     
     # add title and save in /out folder
-    plt.title('Relative frequency per season')
+    fig.suptitle('Relative frequency of emotion labels per season', size=24)
+    fig.tight_layout()
+    fig.subplots_adjust(top=0.92)
     plt.savefig('out/frequency_per_season.png')
 
 def plot_seasons_freq(labelled_df):
