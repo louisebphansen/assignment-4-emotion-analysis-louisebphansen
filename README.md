@@ -82,4 +82,34 @@ To run the code in this repo with predefined/default arguments, run:
 bash run.sh
 ```
 
-This will activate the virual environment and run the 
+This will activate the virual environment and run the ```src/classify_emotions.py``` and ```src/plotting.py``` scripts with default arguments. The classification script outputs an emotion-labelled df, **in/GoT_labelled.csv** whereas the plotting script outputs two image files which can be found in the ```out``` folder.
+
+##### Define arguments yourself
+
+Alternatively, the script(s) can be run with different arguments:
+
+```
+# activate the virtual environment
+source ./env/bin/activate
+
+python3 src/classify_emotions.py --in_csv <in_csv> --out_csv <out_csv>
+
+```
+
+**Arguments:**
+
+- **in_csv:** Name of .csv in ```in``` folder to extract emotion labels for. Default: 'Game_of_Thrones_Script.csv'
+- **out_csv:** What to call the emotion-labelled, output csv file to be placed in ```in```. Default: 'GoT_labelled.csv'.
+
+```
+# activate the virtual environment
+source ./env/bin/activate
+
+python3 src/plotting.py --in_csv <in_csv>
+
+```
+
+**Arguments:**
+- **in_csv:** Name of emotion-labelled csv file in ```in``` folder. Default: 'GoT_labelled.csv'.
+
+### Results
