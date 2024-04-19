@@ -1,7 +1,7 @@
 '''
 This script takes an input .csv which contains emotion-labelled sentences and creates two plots;
 one which shows the distribution of emotion labels for each season and one which shows the distribution
-of emotion labels across all seasons.
+for each emotion label across all season
 '''
 # import required modules
 import pandas as pd 
@@ -21,45 +21,38 @@ def argument_parser():
     
     return args
 
-def relative_frequencies(count_df, n_sentences):
+
+def create_frequency_df(count_df):
+
     '''
-    This function takes a grouped pandas dataframe object containing counts per season and turns it into relative frequencies.
+    Takes a df with counts per label per season and transforms the counts into relative frequencies for each season.
 
     Arguments:
-        - count_df: grouped pandas dataframe containg counts per season
-        - n_sentences: total number of sentences per season
-
-    Returns:
-        frequencies_list: list containing lists of relative frequencies for each emotion label for each season.
+        - count_df: Pandas DataFrame with counts per label per season
+    
+    Returns;
+        - frequency_df: Pandas DataFrame with relative frequency for each label within each season.
     '''
 
-    # create empty list
-    frequencies_list = []
+# initialize empty list
+    frequency_list =[]
 
-    # loop over length of count_df (i.e., number of seasons)
+    # loop over length of count_df (= number of seasons)
     for i in range(len(count_df)):
-        
-        # save counts for each emotion label for that season
-        counts = list(count_df.iloc[i, 1:])
 
-        # create empty list
-        counts_freq = []
+        # save only the columns containing counts (i.e., not 'seasons' column)
+        only_counts = count_df.iloc[:, 1:]
 
-        # go through the count for each emotion label and turn it into relative frequency
-        for n in counts:
-
-            # divide by the total amount of sentences for that season
-            freq = n / n_sentences[i]
-
-            # append to list
-            counts_freq.append(freq)
-
-        # append relative frequencies to list
-        frequencies_list.append(counts_freq)
+        # divide each label's frequency for that season with the total number of sentences in that seasons
+        frequency_row = only_counts.iloc[i] / sum(only_counts.iloc[i])
+        frequency_list.append(frequency_row)
     
-    return frequencies_list
+    # convert list to pandas df
+    frequency_df = pd.DataFrame(frequency_list)
+    
+    return frequency_df
 
-def plot_grid(n_rows, n_cols, frequencies_list, emotion_labels):
+def plot_per_season(n_rows, n_cols, frequency_df, emotion_labels):
     '''
     Takes the relative frequency of emotion labels for each season and plots them in a grid.
     Saves the plot in the /out folder.
@@ -67,7 +60,7 @@ def plot_grid(n_rows, n_cols, frequencies_list, emotion_labels):
     Arguments:
         - n_rows: number of rows in the grid-plot
         - n_cols: number of columns in the grid-plot
-        - frequencies_list: list of relative frequencies for each emotion label for each season
+        - frequency_df: df with relative frequencies for each emotion label for each season
         - emotion_labels: available emotion labels 
 
     Returns:
@@ -86,9 +79,13 @@ def plot_grid(n_rows, n_cols, frequencies_list, emotion_labels):
     # for rows and columns in the grid
     for row in range(n_rows):
         for col in range(n_cols):
+
+                # get distribution of emotion frequencies for that season
+                frequencies = frequency_df.iloc[n]
+
                 # plot barplot using relative frequencies
-                axes[row][col].bar(emotion_labels, frequencies_list[n], color=colors)
-                axes[row][col].set_title(f'Season {n + 1}')
+                axes[row][col].bar(emotion_labels, frequencies, color=colors)
+                axes[row][col].set_title(f'Season {n + 1}') # +1 because n starts from 0
                 axes[row][col].set_ylabel('Relative frequency')
 
                 # add 1 to the 'season' variable to plot the next season in the next grid-space
@@ -98,11 +95,65 @@ def plot_grid(n_rows, n_cols, frequencies_list, emotion_labels):
     fig.suptitle('Relative frequency of emotion labels per season', size=24)
     fig.tight_layout()
     fig.subplots_adjust(top=0.92)
-    plt.savefig('out/frequency_per_season.png')
+    plt.savefig('out/frequency_across_seasons.png')
 
-def plot_seasons_freq(labelled_df):
+def plot_per_label(n_rows, n_cols, frequency_df, emotion_labels):
     '''
-    This function counts the relative frequencies of each emotion label for each season and plots them in a grid.
+    Plots the relative frequency of each emotion label across all seasons.
+    Plot is saved in the /out folder
+
+    Arguments:
+        - n_rows: number of rows in the grid-plot
+        - n_cols: number of columns in the grid-plot
+        - frequency_df: df with relative frequencies for each emotion label for each season
+        - emotion_labels: available emotion labels 
+    
+    Returns:
+        - None
+    '''
+
+    # create subplots with n_rows and n_cols
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(14, 20))
+
+    # create list of seasons 1-8 for plotting
+    seasons = [f'Season {i + 1}' for i in list(range(len(frequency_df)))]
+
+    # create variable in order to loop over each season
+    n = 0
+
+    # for rows and columns in the grid
+    for row in range(n_rows):
+        for col in range(n_cols):
+
+                # we only need 7 plots, but the grid has 8 spaces
+                if n >= 7:
+                    axes[row][col].axis('off') # remove grids to the eighth' subplot is emoty
+                
+                else:
+                    # get list of frequency of emotion label across all seasons
+                    frequency = list(frequency_df.iloc[:, n])
+
+                    # plot barplot using relative frequencies
+                    axes[row][col].bar(seasons, frequency)
+                    axes[row][col].set_title(emotion_labels[n])
+                    axes[row][col].set_ylabel('Relative frequency')
+
+                    # add 1 to the 'season' variable to plot the next season in the next grid-space
+                    n += 1 
+
+    # add title and save in /out folder
+    fig.suptitle('Relative frequency for each emotion across seasons', size=24)
+    fig.tight_layout()
+    fig.subplots_adjust(top=0.92)
+
+    # save in out folder
+    plt.savefig('out/frequency_across_seasons.png')
+
+def plot_results(labelled_df):
+    '''
+    This function counts the relative frequencies of each emotion label for each season.
+    It produces two plots; one which plots the relative frequency of each label for each season, and one
+    which plots the releative frequency of each label across all seasons.
     
     Arguments:
         - labelled_df: Pandas DataFrame with emotion-labelled data
@@ -114,50 +165,18 @@ def plot_seasons_freq(labelled_df):
     # save dataframe with count for each label for each season
     count_df = labelled_df.groupby(['Season', 'label']).size().unstack().reset_index()
 
-    # save list of total number of sentences for each season
-    n_sentences = list(labelled_df.groupby('Season').size())
-
-    # convert raw counts to relative frequencies
-    frequencies_list = relative_frequencies(count_df, n_sentences)
+    # create df with relative frequencies
+    frequency_df = create_frequency_df(count_df)
 
     # save list of emotion labels
     emotion_labels = list(count_df.columns[1:])
 
-    # plot barplot of frequencies for labels for each season
-    plot_grid(4, 2, frequencies_list, emotion_labels)
+    # plot barplots of frequencies for labels for each season
+    plot_per_season(4, 2, frequency_df, emotion_labels)
 
-def plot_freq_all(labelled_df):
-    '''
-    Counts and plots the relative frequency of emotion labels across all seasons.
-    Plot is saved in the /out folder
+    # plot barplots of frequency of each label across seasons
+    plot_per_label(4, 2, frequency_df, emotion_labels)
 
-    Arguments:
-        - labelled_df: Pandas DataFrame with emotion-labelled data
-    
-    Returns:
-        - None
-    '''
-
-    # get count of each emotion label across all seasons
-    all_counts = list(labelled_df.groupby('label').size())
-
-    # calculate relative frequencies by dividing by total amount of sentences
-    rel_freqs = [n / len(labelled_df) for n in all_counts]
-
-    # get list of labels (sorting them alphabetically)
-    labels = list(np.sort(labelled_df['label'].unique()))
-
-    # create plot
-    fig, ax = plt.subplots()
-    colors = ['red', 'olive', 'purple', 'green', 'orange', 'blue', 'pink']
-
-    # create barplot with labels and relative frequencies
-    ax.bar(labels, rel_freqs, color=colors)
-    ax.set_ylabel('Relative frequency')
-    ax.set_title('Relative frequency across all seasons')
-
-    # save in out folder
-    plt.savefig('out/frequency_across_seasons.png')
 
 def main():
 
@@ -169,10 +188,7 @@ def main():
     labelled_df = pd.read_csv(in_path)
 
     # create plot of frequencies of labels for each season and save in /out
-    plot_seasons_freq(labelled_df)
-
-    # create plot of frequencies of labels across all seasons
-    plot_freq_all(labelled_df)
+    plot_results(labelled_df)
 
     print('Code finished: see plots in /out folder')
 
