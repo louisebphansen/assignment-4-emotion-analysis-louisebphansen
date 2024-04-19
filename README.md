@@ -113,9 +113,11 @@ python3 src/plotting.py --in_csv <in_csv>
 - **in_csv:** Name of emotion-labelled csv file in ```in``` folder. Default: 'GoT_labelled.csv'.
 
 ### Results
-![image](https://github.com/louisebphansen/assignment-4-emotion-analysis-louisebphansen/assets/75262659/e0c5d6ed-ab05-466c-8e0a-153091cfc257)
 
-![image](https://github.com/louisebphansen/assignment-4-emotion-analysis-louisebphansen/assets/75262659/b089508b-f1c6-48ab-b7d4-6a45ccaa964f)
+![image](https://github.com/louisebphansen/assignment-4-emotion-analysis-louisebphansen/assets/75262659/bff5586e-9fcf-4da5-a4c5-3c70b484d930)
+
+![image](https://github.com/louisebphansen/assignment-4-emotion-analysis-louisebphansen/assets/75262659/6f80d743-aecb-4f78-b464-835156f208d8)
+
 
 It is clearly evident that the most common emotion throughout the entire series is 'neutral'. This makes sense as there are probably a lot of sentences which doesn't have any emotional valence, but rather just someone saying *hello* or asking someone to bring out the horses. Interestingly, the most common emotions after 'neutral' are 'anger', 'disgust' and 'surprise'. 'anger' being the second-most frequent emotion is probably because Game of Thrones is a series containing a lot of hostility, violence and war-scenes. The frequency of the 'disgust' emotion probably also reflects this hostility as well as the disputes between the different houses which is one of the core themes throughout the series. 
 
