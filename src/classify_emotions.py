@@ -10,6 +10,14 @@ import argparse
 import os 
 from transformers.pipelines.pt_utils import KeyDataset
 from tqdm.auto import tqdm
+from codecarbon import EmissionsTracker 
+from codecarbon import track_emissions
+
+# define emissionstracker to track CO2 emissions (for assignment 5)
+tracker = EmissionsTracker(project_name="assignment4_subtasks_classification",
+                           experiment_id="classify_emotions",
+                           output_dir='emissions',
+                           output_file="emissions_emotion_classification.csv")
 
 # define argument parser
 def argument_parser():
@@ -41,14 +49,23 @@ def classify_emotions(df):
     # converting the dataset from pandas to HuggingFace dataset (recommended by HuggingFace in ther documentation)
     dataset = Dataset.from_pandas(df_cleaned)
 
+    # track model loading
+    tracker.start_task('Initializinng HF classification pipeline')
+
     # loading pre-trained HuggingFace emotion classifier
     classifier = pipeline("text-classification", 
                     model="j-hartmann/emotion-english-distilroberta-base", 
                     return_all_scores=False) # only return the most probably emotion label
 
+    # stop tracker
+    loading_emissions = tracker.stop_task()
+
     # initialize empty lists
     labels = []
     score = []
+
+    # track emotion classification
+    tracker.start_task('Classifying emotions')
 
     # classify each sentence in dataset and save labels and scores to list (again, using the recommended method from HuggingFace pipeline documentation for optimal use)
     for out in tqdm(classifier(KeyDataset(dataset, "Sentence"))):
@@ -56,12 +73,21 @@ def classify_emotions(df):
         labels.append(out['label'])
         score.append(out['score'])
 
+    # stop tracking of emotion
+    classification_emissions = tracker.stop_task()
+    tracker.stop()
+
     # add labels and scores as new columns to DataFrame
     df_cleaned['label'] = labels 
     df_cleaned['score'] = score
 
     return df_cleaned
 
+# create new tracker using a decorator to track emissions for running the entire script
+@track_emissions(project_name="assignment4_classification_full",
+                experiment_id="assignment4_classification_full",
+                output_dir='emissions',
+                output_file="assignment4_classification_full.csv")
 def main():
 
     # load args

@@ -9,6 +9,14 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import argparse
 import os 
+from codecarbon import EmissionsTracker 
+from codecarbon import track_emissions
+
+# define emissionstracker to track CO2 emissions (for assignment 5)
+tracker = EmissionsTracker(project_name="assignment4_subtasks_plotting",
+                           experiment_id="plotting",
+                           output_dir='emissions',
+                           output_file="emissions_plotting.csv")
 
 # define argument parser
 def argument_parser():
@@ -177,7 +185,10 @@ def plot_results(labelled_df):
     # plot barplots of frequency of each label across seasons
     plot_per_label(4, 2, frequency_df, emotion_labels)
 
-
+@track_emissions(project_name="assignment4_plotting_full",
+                experiment_id="assignment4_plotting_full",
+                output_dir='emissions',
+                output_file="assignment4_plotting_full.csv")
 def main():
 
     # load args
@@ -187,8 +198,13 @@ def main():
     in_path = os.path.join('in', args['in_csv'])
     labelled_df = pd.read_csv(in_path)
 
+    # track plotting task
+    tracker.start_task('Filter df and preprocess test')
+
     # create plot of frequencies of labels for each season and save in /out
     plot_results(labelled_df)
+
+    plotting_emissions = tracker.stop_task()
 
     print('Code finished: see plots in /out folder')
 
