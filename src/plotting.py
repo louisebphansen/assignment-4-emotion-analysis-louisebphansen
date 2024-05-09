@@ -1,4 +1,9 @@
 '''
+LANGUAGE ANALYTICS @ AARHUS UNIVERSITY, ASSIGNMENT 4: Emotion Analysis
+
+AUTHOR: Louise Brix Pilegaard Hansen
+
+DESCRIPTION:
 This script takes an input .csv which contains emotion-labelled sentences and creates two plots;
 one which shows the distribution of emotion labels for each season and one which shows the distribution
 for each emotion label across all season
@@ -16,7 +21,7 @@ from codecarbon import track_emissions
 tracker = EmissionsTracker(project_name="assignment4_subtasks_plotting",
                            experiment_id="plotting",
                            output_dir='emissions',
-                           output_file="emissions_plotting.csv")
+                           output_file="assignment4_plotting_subtasks_emissions.csv")
 
 # define argument parser
 def argument_parser():
@@ -30,7 +35,7 @@ def argument_parser():
     return args
 
 
-def create_frequency_df(count_df):
+def create_frequency_df(count_df: pd.DataFrame) -> pd.DataFrame:
 
     '''
     Takes a df with counts per label per season and transforms the counts into relative frequencies for each season.
@@ -60,7 +65,7 @@ def create_frequency_df(count_df):
     
     return frequency_df
 
-def plot_per_season(n_rows, n_cols, frequency_df, emotion_labels):
+def plot_per_season(n_rows: int, n_cols: int, frequency_df: pd.DataFrame, emotion_labels: list):
     '''
     Takes the relative frequency of emotion labels for each season and plots them in a grid.
     Saves the plot in the /out folder.
@@ -99,13 +104,17 @@ def plot_per_season(n_rows, n_cols, frequency_df, emotion_labels):
                 # add 1 to the 'season' variable to plot the next season in the next grid-space
                 n += 1 
     
-    # add title and save in /out folder
+    # add title
     fig.suptitle('Relative frequency of emotion labels per season', size=24)
     fig.tight_layout()
     fig.subplots_adjust(top=0.92)
-    plt.savefig('out/frequency_across_seasons.png')
 
-def plot_per_label(n_rows, n_cols, frequency_df, emotion_labels):
+    # save in /out folder
+    out_path = os.path.join('out', 'frequency_per_season.png')
+
+    plt.savefig(out_path)
+
+def plot_per_label(n_rows: int, n_cols: int, frequency_df: pd.DataFrame, emotion_labels: list):
     '''
     Plots the relative frequency of each emotion label across all seasons.
     Plot is saved in the /out folder
@@ -133,9 +142,9 @@ def plot_per_label(n_rows, n_cols, frequency_df, emotion_labels):
     for row in range(n_rows):
         for col in range(n_cols):
 
-                # we only need 7 plots, but the grid has 8 spaces
+                # only need 7 plots, but the grid has 8 spaces
                 if n >= 7:
-                    axes[row][col].axis('off') # remove grids to the eighth' subplot is emoty
+                    axes[row][col].axis('off') # remove last grid so the eighth' subplot is empty
                 
                 else:
                     # get list of frequency of emotion label across all seasons
@@ -149,27 +158,33 @@ def plot_per_label(n_rows, n_cols, frequency_df, emotion_labels):
                     # add 1 to the 'season' variable to plot the next season in the next grid-space
                     n += 1 
 
-    # add title and save in /out folder
+    # add title
     fig.suptitle('Relative frequency for each emotion across seasons', size=24)
     fig.tight_layout()
     fig.subplots_adjust(top=0.92)
 
     # save in out folder
-    plt.savefig('out/frequency_across_seasons.png')
+    out_path = os.path.join('out', 'frequency_across_seasons.png')
 
-def plot_results(labelled_df):
+    plt.savefig(out_path)
+
+def plot_results(in_csv:str):
     '''
-    This function counts the relative frequencies of each emotion label for each season.
+    This function first counts the relative frequencies of each emotion label for each season.
     It produces two plots; one which plots the relative frequency of each label for each season, and one
-    which plots the releative frequency of each label across all seasons.
+    which plots the releative frequency of each label across all seasons. The plots are saved in the /out folder
     
     Arguments:
-        - labelled_df: Pandas DataFrame with emotion-labelled data
+        - in_csv: Name of csv file with emotion-labelled data
     
     Returns:
         None
-
     '''
+
+    # define in-path and load labelled df
+    in_path = os.path.join('in', in_csv)
+    labelled_df = pd.read_csv(in_path)
+
     # save dataframe with count for each label for each season
     count_df = labelled_df.groupby(['Season', 'label']).size().unstack().reset_index()
 
@@ -179,34 +194,46 @@ def plot_results(labelled_df):
     # save list of emotion labels
     emotion_labels = list(count_df.columns[1:])
 
-    # plot barplots of frequencies for labels for each season
+    # track plotting task
+    tracker.start_task('Plot results')
+
+    # plot barplots of frequencies for labels per season
     plot_per_season(4, 2, frequency_df, emotion_labels)
 
     # plot barplots of frequency of each label across seasons
     plot_per_label(4, 2, frequency_df, emotion_labels)
 
-@track_emissions(project_name="assignment4_plotting_full",
-                experiment_id="assignment4_plotting_full",
+    # stop tracking of task
+    plotting_emissions = tracker.stop_task()
+
+    print('Code finished: see plots in /out folder')
+
+    # stop all tracking
+    tracker.stop()
+
+@track_emissions(project_name="assignment4_plotting_FULL",
+                experiment_id="assignment4_plotting_FULL",
                 output_dir='emissions',
-                output_file="assignment4_plotting_full.csv")
+                output_file="assignment4_plotting_FULL_emissions.csv")
 def main():
 
     # load args
     args = argument_parser()
 
     # define in-path and load labelled df
-    in_path = os.path.join('in', args['in_csv'])
-    labelled_df = pd.read_csv(in_path)
+    #in_path = os.path.join('in', args['in_csv'])
+    #labelled_df = pd.read_csv(in_path)
 
     # track plotting task
-    tracker.start_task('Filter df and preprocess test')
+    #tracker.start_task('Plot results')
 
     # create plot of frequencies of labels for each season and save in /out
-    plot_results(labelled_df)
+    plot_results(args['in_csv'])
 
-    plotting_emissions = tracker.stop_task()
+    #plotting_emissions = tracker.stop_task()
+    #tracker.stop()
 
-    print('Code finished: see plots in /out folder')
+    #print('Code finished: see plots in /out folder')
 
 if __name__ == '__main__':
    main()

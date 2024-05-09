@@ -5,3 +5,5 @@ pandas==2.2.2
 tqdm==4.66.2
 transformers==4.39.3
 torch==2.2.2
+codecarbon==2.3.5
+setuptools==69.5.1
