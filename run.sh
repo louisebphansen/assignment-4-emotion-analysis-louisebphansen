@@ -1,7 +1,7 @@
 # activate virtual environment
 source ./env/bin/activate
 
-# unzip datafile
+# unzip data file (create /in folder with data)
 unzip data.zip
 
 # run script to add emotion labels to each sentence using default arguments
