@@ -220,20 +220,8 @@ def main():
     # load args
     args = argument_parser()
 
-    # define in-path and load labelled df
-    #in_path = os.path.join('in', args['in_csv'])
-    #labelled_df = pd.read_csv(in_path)
-
-    # track plotting task
-    #tracker.start_task('Plot results')
-
-    # create plot of frequencies of labels for each season and save in /out
+    # create plots and save in /out
     plot_results(args['in_csv'])
-
-    #plotting_emissions = tracker.stop_task()
-    #tracker.stop()
-
-    #print('Code finished: see plots in /out folder')
 
 if __name__ == '__main__':
    main()

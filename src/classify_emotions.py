@@ -113,7 +113,7 @@ def assign_emotion_labels(in_csv:str, model:str, labelled_csv:str):
     tracker.start_task('Classifying emotions')
 
     # classify emotions and add emotion labels to df
-    df_labelled = classify_emotions(df)
+    df_labelled = classify_emotions(df, classifier)
 
     # stop tracking of classification
     classification_emissions = tracker.stop_task()
@@ -137,23 +137,8 @@ def main():
     # load args
     args = argument_parser()
 
-    # assign emotion labels to input dataframe
+    # assign emotion labels
     assign_emotion_labels(args['in_csv'], args['model'], args['labelled_csv'])
-    
-    # define in path
-    #in_path = os.path.join('in', args['in_csv'])
-
-    # read csv as pandas df
-    #df = pd.read_csv(in_path)
-
-    # add emotion labels to df
-    #df_labelled = classify_emotions(df)
-
-    # define out path
-    #out_path = os.path.join('in', args['out_csv'])
-
-    # save labelled df
-    #df_labelled.to_csv(out_path)
 
 if __name__ == '__main__':
    main()
