@@ -25,6 +25,7 @@ For this assignment, write code which does the following:
 | ```run.sh```    | Bash script for running all code with default arguments|
 | ```setup.sh```  | Bash script for setting up virtual environment |
 | ```requirements.txt```  | Packages required to run the code|
+|```emissions```|Contains csv files with information about how much carbon is emitted when running the code, which is used for [Assignment 5](https://github.com/louisebphansen/assignment-5-evaluating-environmental-impact-louisebphansen)|
 
 ### Methods
 This project contains the code to examine the emotion label of each sentence in a dataset of spoken lines in the Game of Thrones television series.
