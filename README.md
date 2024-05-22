@@ -70,7 +70,7 @@ bash setup.sh
 This will create a virtual environment in the directory (```env```) and install the required packages to run the code.
 
 #### Download data
-Download the dataset from Kaggle ([link])(https://www.kaggle.com/datasets/albenft/game-of-thrones-script-all-seasons?select=Game_of_Thrones_Script.csv) and unzip it. 
+Download the dataset from Kaggle ([link](https://www.kaggle.com/datasets/albenft/game-of-thrones-script-all-seasons?select=Game_of_Thrones_Script.csv)) and unzip it. 
 
 Create a new folder in the main directory called ```in``` and place the *'Game_of_Thrones_Scipt.csv'* file here. 
 
