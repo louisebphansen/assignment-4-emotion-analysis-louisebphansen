@@ -133,6 +133,4 @@ For future analysis of this dataset, one could consider to remove the rows with 
 
 ### A note on carbon emissions
 
-The measured CO2-eq emissions for this project was .. See [Assignment 5](https://github.com/louisebphansen/assignment-5-evaluating-environmental-impact-louisebphansen) for a further discussion of this.
-
 CodeCarbon was used to measure the environmental impact of the code in this repository. The measured CO2-equivalent emissions for this project was 0.0092 Kg. See [Assignment 5](https://github.com/louisebphansen/assignment-5-evaluating-environmental-impact-louisebphansen) for a further discussion of this. 
