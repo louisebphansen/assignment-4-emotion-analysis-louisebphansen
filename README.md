@@ -28,16 +28,16 @@ For this assignment, write code which does the following:
 |```emissions```|Contains csv files with information about how much carbon is emitted when running the code, which is used for [Assignment 5](https://github.com/louisebphansen/assignment-5-evaluating-environmental-impact-louisebphansen)|
 
 ### Methods
-This project contains the code to examine the emotion label of each sentence in a dataset of spoken lines in the Game of Thrones television series.
+This project contains the code to assign emotion labels to each sentence in a dataset of spoken lines in the Game of Thrones television series and plots the results.
 
-More specifically, the script ```src/classify_emotions.py``` takes an input csv file where each row represents a sentence and assigns an emotion label to these sentences. This is done using a HuggingFace classification [pipeline](https://huggingface.co/docs/transformers/main_classes/pipelines), which uses the **'j-hartmann/emotion-english-distilroberta-base'** pretrained emotion classifier. Using the pipeline, the model calculates probabilities of each emotion label, "anger", "disgust", "fear", "joy", "neutral", "sadness" and "surprise". The label with the highest probability is chosen as the sentence's 'emotion label' and added to the dataframe in a seperate column. The labelled dataframe is saved to a csv file as **GoT_labelled.csv**.
+More specifically, the script ```src/classify_emotions.py``` takes an input csv file where each row represents a sentence and assigns an emotion label to these sentences. This is done using a HuggingFace classification [pipeline](https://huggingface.co/docs/transformers/main_classes/pipelines)with a pretrained emotion classifier. Using the pipeline, the model calculates probabilities of each emotion label, "anger", "disgust", "fear", "joy", "neutral", "sadness" and "surprise". The label with the highest probability is chosen as the sentence's 'emotion label' and added to the dataframe in a seperate column. The labelled dataframe is saved to a csv file as **GoT_labelled.csv**.
 
 The script ```src/plotting.py``` takes this emotion-labelled dataframe and creates different visualizations. First, the relative frequencies for each emotion label for each season are calculated and plotted in a grid of barplots, which can be found at **out/frequency_per_season.png**. Next, relative frequencies for each emotion label across all seasons are calculated and plotted in a grid of barplots, which can be found at **out/frequency_across_seasons.png**.
 
 
 ### Data
 
-The datasets consists of 22,300 sentences of spoken lines in all eight seasons of the Game of Thrones television series. The dataset can be found on [Kaggle](https://www.kaggle.com/datasets/albenft/game-of-thrones-script-all-seasons?select=Game_of_Thrones_Script.csv).
+The dataset consists of 22,300 sentences of spoken lines in all eight seasons of the Game of Thrones television series. The dataset can be found on [Kaggle](https://www.kaggle.com/datasets/albenft/game-of-thrones-script-all-seasons?select=Game_of_Thrones_Script.csv).
 
 ### Usage
 
@@ -134,3 +134,5 @@ For future analysis of this dataset, one could consider to remove the rows with 
 ### A note on carbon emissions
 
 The measured CO2-eq emissions for this project was .. See [Assignment 5](https://github.com/louisebphansen/assignment-5-evaluating-environmental-impact-louisebphansen) for a further discussion of this.
+
+CodeCarbon was used to measure the environmental impact of the code in this repository. The measured CO2-equivalent emissions for this project was 0.0092 Kg. See [Assignment 5](https://github.com/louisebphansen/assignment-5-evaluating-environmental-impact-louisebphansen) for a further discussion of this. 
