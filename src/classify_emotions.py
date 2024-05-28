@@ -4,8 +4,8 @@ LANGUAGE ANALYTICS @ AARHUS UNIVERSITY, ASSIGNMENT 4: Emotion Analysis
 AUTHOR: Louise Brix Pilegaard Hansen
 
 DESCRIPTION:
-This script takes an input .csv file containing sentences and gives it an emotion label using the
-pretrained model 'j-hartmann/emotion-english-distilroberta-base' using a HuggingFace transfomer pipeline.
+This script takes an input .csv file containing spoken sentences and gives it an emotion label using a
+pretrained transfomer model using a HuggingFace pipeline.
 '''
 # import required modules
 import pandas as pd 
